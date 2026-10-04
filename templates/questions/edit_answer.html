@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}ویرایش پاسخ | DavinCode{% endblock %}
+{% block content %}
+<div class="wrap" style="margin-top:32px"><div class="card">
+  <h1 style="font-size:1.4rem;margin-bottom:6px">ویرایش پاسخ</h1>
+  <p class="meta" style="margin:0 0 18px">برای سوال: <a href="{% url 'question_detail' answer.question_id %}">{{ answer.question.title }}</a></p>
+  <form method="post">{% csrf_token %}
+    <div class="field">{{ form.body }}<div class="errors">{{ form.body.errors }}</div></div>
+    <button class="btn">ذخیره‌ی تغییرات</button> <a class="edit" href="{% url 'question_detail' answer.question_id %}">انصراف</a>
+  </form>
+</div></div>
+{% endblock %}

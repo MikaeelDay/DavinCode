@@ -1,0 +1,41 @@
+{% load static %}<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}DavinCode | پرسش و پاسخ برنامه‌نویسی{% endblock %}</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script>
+<link rel="preload" href="{% static 'fonts/Vazirmatn.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="{% url 'question_list' %}">DavinCode</a>
+  <form class="nav-search" action="{% url 'search' %}" role="search">
+    <input type="text" name="q" value="{{ query|default:'' }}" placeholder="جستجو در سوال‌ها" aria-label="جستجو">
+  </form>
+  <nav class="nav">
+    <button class="linkbtn theme" id="theme" type="button" aria-label="تغییر حالت روشن یا تاریک"><span class="ico"></span></button>
+    {% if user.is_authenticated %}
+      <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="linkbtn">خروج</button></form>
+    {% else %}
+      <a href="{% url 'login' %}">ورود</a>
+      <a class="btn warm sm" href="{% url 'signup' %}">ثبت‌نام</a>
+    {% endif %}
+  </nav>
+</div></header>
+<main>
+  {% if messages %}<div class="wrap"><ul class="messages">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul></div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer><div class="wrap"><span>DavinCode · پلتفرم پرسش و پاسخ برنامه‌نویسی</span><span>© 2026</span></div></footer>
+<script>
+document.getElementById('theme').onclick=function(){var t=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}};
+(function(){var t=document.querySelector('.tilt'),h=document.querySelector('.hero');if(!t||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+h.addEventListener('mousemove',function(e){var r=h.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;t.style.setProperty('--ry',-9+x*16);t.style.setProperty('--rx',4-y*12)});
+h.addEventListener('mouseleave',function(){t.style.removeProperty('--ry');t.style.removeProperty('--rx')})})();
+</script>
+</body>
+</html>

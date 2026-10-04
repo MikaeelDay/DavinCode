@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero"><div class="wrap">
+  <div>
+    <h1>سوال بپرس، جواب بگیر، یاد بگیر</h1>
+    <p>جامعه‌ی پرسش و پاسخ برنامه‌نویسان فارسی‌زبان</p>
+    <form action="{% url 'search' %}" role="search">
+      <input type="text" name="q" placeholder="دنبال چه چیزی می‌گردی؟" aria-label="جستجو">
+      <button class="btn">جستجو</button>
+    </form>
+  </div>
+  <div class="stage" aria-hidden="true"><div class="float"><div class="tilt">
+<div class="win">
+    <div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="c"># چرا لیست من بین فراخوانی‌ها حفظ می‌شود؟</span>
+<span class="k">def</span> <span class="a">add</span>(x, items=[]):
+    items.append(x)
+    <span class="k">return</span> items
+
+<span class="k">&gt;&gt;&gt;</span> add(<span class="s">1</span>); add(<span class="s">2</span>)
+[<span class="s">1</span>, <span class="s">2</span>]  <span class="c"># انتظار داشتم [2]</span> <span class="caret"></span></pre>
+</div>
+<span class="chip c1">Python</span><span class="chip c2">حل شد ✓</span>
+<div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</div></div></div>
+</div></section>
+<div class="wrap">
+  <div class="head"><h2>جدیدترین سوال‌ها</h2><a class="btn" href="{% url 'add_question' %}">پرسیدن سوال</a></div>
+  <div class="list">
+    {% for q in page %}{% include 'questions/_row.html' %}
+    {% empty %}<div class="empty">هنوز سوالی پرسیده نشده. اولین نفر باش!</div>{% endfor %}
+  </div>
+  {% include 'questions/_pager.html' %}
+</div>
+{% endblock %}

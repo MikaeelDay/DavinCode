@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{% if editing %}ویرایش سوال{% else %}پرسیدن سوال{% endif %} | DavinCode{% endblock %}
+{% block head %}{{ form.media }}{% endblock %}
+{% block content %}
+<div class="wrap" style="margin-top:32px">
+  <div class="card">
+    <h1 style="font-size:1.4rem;margin-bottom:20px">{% if editing %}ویرایش سوال{% else %}پرسیدن سوال{% endif %}</h1>
+    <form method="post">{% csrf_token %}
+      <div class="field"><label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>{{ form.title }}<div class="errors">{{ form.title.errors }}</div></div>
+      <div class="field"><label>{{ form.body.label }}</label>{{ form.body }}<div class="errors">{{ form.body.errors }}</div></div>
+      <button class="btn">{% if editing %}ذخیره‌ی تغییرات{% else %}ثبت سوال{% endif %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+<article class="q" style="--i:{{ forloop.counter0 }}">
+  <div class="stat{% if q.accepted_answer_id %} solved{% endif %}"><b>{{ q.answer_count }}</b><span>{% if q.accepted_answer_id %}حل شد{% else %}پاسخ{% endif %}</span></div>
+  <div>
+    <h3><a href="{% url 'question_detail' q.id %}">{{ q.title }}</a></h3>
+    <p>{{ q.excerpt }}</p>
+    <div class="meta"><a href="{% url 'profile' q.author.username %}">{{ q.author.username }}</a> · {{ q.created_at|date:"Y/m/d H:i" }}</div>
+  </div>
+</article>

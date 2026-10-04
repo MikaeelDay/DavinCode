@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}جستجو: {{ query }} | DavinCode{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="head"><h2>{% if query %}نتایج «{{ query }}» ({{ page.paginator.count }}){% else %}عبارتی برای جستجو وارد کنید{% endif %}</h2></div>
+  <div class="list">
+    {% for q in page %}{% include 'questions/_row.html' %}
+    {% empty %}<div class="empty">{% if query %}سوالی پیدا نشد. عبارت دیگری را امتحان کن یا <a href="{% url 'add_question' %}">سوال جدید بپرس</a>.{% else %}چیزی برای نمایش نیست.{% endif %}</div>{% endfor %}
+  </div>
+  {% include 'questions/_pager.html' %}
+</div>
+{% endblock %}

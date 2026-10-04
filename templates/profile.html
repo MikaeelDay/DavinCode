@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.username }} | DavinCode{% endblock %}
+{% block content %}
+<div class="wrap" style="margin-top:32px">
+  <div class="card who">
+    {% if profile.has_custom_image %}<img class="avatar" src="{{ profile.profile_image.url }}" alt="">{% else %}<div class="avatar" aria-hidden="true">{{ profile_user.username|first|upper }}</div>{% endif %}
+    <div>
+      <h1 style="font-size:1.4rem">{{ profile_user.username }}</h1>
+      {% if profile.bio %}<div class="meta">{{ profile.bio }}</div>{% endif %}
+      <div class="stats"><span><b>{{ question_total }}</b> سوال</span><span><b>{{ answer_total }}</b> پاسخ</span></div>
+    </div>
+  </div>
+  <h2 class="sub">سوال‌ها</h2>
+  <div class="list">{% for q in questions %}{% include 'questions/_row.html' %}{% empty %}<div class="empty">هنوز سوالی ثبت نشده.</div>{% endfor %}</div>
+  <h2 class="sub">پاسخ‌ها</h2>
+  <div class="card">{% for a in answers %}<div class="mini"><a href="{% url 'question_detail' a.question_id %}">{{ a.question.title }}</a><div class="meta">{{ a.body|truncatechars:110 }}</div></div>{% empty %}<div class="empty" style="padding:8px">هنوز پاسخی ثبت نشده.</div>{% endfor %}</div>
+</div>
+{% endblock %}

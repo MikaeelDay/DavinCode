@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}{{ question.title }} | DavinCode{% endblock %}
+{% block content %}
+<div class="wrap" style="margin-top:32px">
+  <article class="card post">
+    <h1>{{ question.title }}</h1>
+    <div class="meta">{{ question.author.username }} · {{ question.created_at|date:"Y/m/d H:i" }}{% if question.edited_at %} · <span class="edited">ویرایش‌شده</span>{% endif %}{% if question.accepted_answer_id %} · <span class="badge">حل شده</span>{% endif %}{% if user == question.author %} · <a class="edit" href="{% url 'edit_question' question.id %}">ویرایش</a>{% endif %}</div>
+    <div class="prose" style="margin-top:16px">{{ question.body|safe }}</div>
+  </article>
+
+  <h2 class="sub">{{ answers|length }} پاسخ</h2>
+  {% for a in answers %}
+  <div class="card answer{% if a.is_accepted %} accepted{% endif %}" id="a{{ a.id }}">
+    <div class="votes">
+      <form method="post" action="{% url 'vote_answer' a.id 'up' %}">{% csrf_token %}<button class="vote" title="مفید بود" {% if a.author_id == user.id or not user.is_authenticated %}disabled{% endif %}>▲</button></form>
+      <span class="score">{{ a.score }}</span>
+      <form method="post" action="{% url 'vote_answer' a.id 'down' %}">{% csrf_token %}<button class="vote" title="مفید نبود" {% if a.author_id == user.id or not user.is_authenticated %}disabled{% endif %}>▼</button></form>
+    </div>
+    <div class="body">
+      <div class="plain">{{ a.body }}</div>
+      <div class="actions">
+        <span class="meta"><a href="{% url 'profile' a.author.username %}">{{ a.author.username }}</a> · {{ a.created_at|date:"Y/m/d H:i" }}{% if a.edited_at %} · <span class="edited">ویرایش‌شده</span>{% endif %}{% if user == a.author %} · <a class="edit" href="{% url 'edit_answer' a.id %}">ویرایش</a>{% endif %}</span>
+        {% if a.is_accepted %}<span class="badge">پاسخ درست</span>
+        {% elif user == question.author %}<form method="post" action="{% url 'accept_answer' a.id %}">{% csrf_token %}<button class="btn ghost sm">این پاسخ درست است</button></form>{% endif %}
+      </div>
+      {% if a.comment_set.all or user.is_authenticated %}<div class="replies">
+        {% for c in a.comment_set.all %}<div class="reply"><span class="meta"><a href="{% url 'profile' c.author.username %}">{{ c.author.username }}</a> · {{ c.created_at|date:"Y/m/d H:i" }}</span>{{ c.body }}</div>{% endfor %}
+        {% if user.is_authenticated %}<details class="rform"><summary>ریپلای به این پاسخ</summary>
+          <form method="post" action="{% url 'add_comment' a.id %}">{% csrf_token %}{{ cform.body }}<button class="btn ghost sm">ارسال ریپلای</button></form>
+        </details>{% endif %}
+      </div>{% endif %}
+    </div>
+  </div>
+  {% empty %}<div class="card empty">هنوز پاسخی داده نشده. اولین پاسخ را تو بده.</div>{% endfor %}
+
+  <div class="card">
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'add_answer' question.id %}">{% csrf_token %}
+      <div class="field"><label for="{{ form.body.id_for_label }}">پاسخ شما</label>{{ form.body }}</div>
+      <button class="btn">ثبت پاسخ</button>
+    </form>
+    {% else %}<p style="margin:0">برای پاسخ دادن <a href="{% url 'login' %}?next={{ request.path }}">وارد شوید</a> یا <a href="{% url 'signup' %}">ثبت‌نام کنید</a>.</p>{% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}ثبت‌نام | DavinCode{% endblock %}
+{% block content %}
+<div class="wrap"><div class="card auth"><h1>ساخت حساب کاربری</h1>
+  <form method="post">{% csrf_token %}
+    {% for f in form %}<div class="field"><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}{% if f.help_text %}<div class="help">{{ f.help_text|safe }}</div>{% endif %}<div class="errors">{{ f.errors }}</div></div>{% endfor %}
+    <button class="btn warm">ثبت‌نام</button>
+  </form>
+  <p class="alt">حساب داری؟ <a href="{% url 'login' %}">ورود</a></p>
+</div></div>
+{% endblock %}
